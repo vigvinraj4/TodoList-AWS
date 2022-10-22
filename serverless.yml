@@ -47,3 +47,11 @@ functions:
             method: post
             path: resendConfirmationCode
             cors: true 
+  userLogin:
+      description: This API is used for  authenticating a user.
+      handler: src/login.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: login
+            cors: true 
