@@ -1,11 +1,49 @@
-service: Todolists-aws-resources
+service: Todolist-aws-resources
 
 frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: nodejs14.x
-
+  region: ap-southeast-2
+#In the field of Environment We would defining the unique id of the resources that had been created in the resources section
+#We use Ref: attribute to refer the id's that had been generated during the deployement phase 
+  environment:
+      REGION: ap-southeast-2
+      user_pool_id: ap-southeast-2_Q5to0vpJh
+      client_id: 2n19a3gsgt8i7doq2q8oid226a
+  iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - cognito-idp:AdminInitiateAuth
+          - cognito-idp:AdminCreateUser
+          - cognito-idp:AdminSetUserPassword
+          - cognito-idp:AdminDisableUser
+          - cognito-idp:AdminResetUserPassword
+          - cognito-idp:AdminDeleteUser
+        Resource: "*"
 functions:
-  hello:
-    handler: handler.hello
+  userSignup:
+      description: sign up user with cognito adminCreateUser.
+      handler: src/userSignup.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: userSignup
+            cors: true     
+  userConfirm:
+      description: This API is used for confirming email address with the verification code.
+      handler: src/userConfirm.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: userConfirm
+            cors: true    
+  resendConfirmation:
+      description: This API is used for  resendingconfirmation code for the specified email address with the verification code.
+      handler: src/resendConfirmationCode.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: resendConfirmationCode
+            cors: true 
