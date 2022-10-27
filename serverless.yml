@@ -37,6 +37,10 @@ provider:
           - cognito-idp:AdminDeleteUser
         Resource: "*"
 functions:
+  authenticate:
+      description: this lambda is used for authenticate the api gateway before allowing any access.
+      handler: src/auth/authorizer.lambdaFunction
+
   userSignup:
       description: sign up user with cognito adminCreateUser.
       handler: src/userSignup.lambdaFunction
@@ -77,6 +81,9 @@ functions:
             method: post
             path: disableUsers
             cors: true
+            authorizer: 
+              name: authenticate
+              
   deleteUser:
       description: This API is used for deleting the user account.
       handler: src/deleteUser.lambdaFunction
@@ -85,3 +92,5 @@ functions:
             method: post
             path: deleteUsers
             cors: true
+            authorizer: 
+              name: authenticate
