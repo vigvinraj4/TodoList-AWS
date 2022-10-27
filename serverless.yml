@@ -2,6 +2,20 @@ service: Todolist-aws-resources
 
 frameworkVersion: '3'
 
+package:
+  individually: true
+  exclude:
+    - .git/**
+    - node_modules/**
+    - .venv/**
+  include:
+    - '!*'
+    - '!**'
+    - src/*.js
+plugins:
+  - serverless-offline
+ 
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -55,3 +69,19 @@ functions:
             method: post
             path: login
             cors: true 
+  disableUser:
+      description: This API is used for  disabling the user account.
+      handler: src/disableUser.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: disableUsers
+            cors: true
+  deleteUser:
+      description: This API is used for deleting the user account.
+      handler: src/deleteUser.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: deleteUsers
+            cors: true

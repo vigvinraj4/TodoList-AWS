@@ -8,12 +8,13 @@ const AWS = require('aws-sdk');
   
     const cognito = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
 
+   // AWS.config.update({region:'ap-southeast-2'});
 
 module.exports.lambdaFunction = async (event) => {
   const {email, password} = JSON.parse(event.body);
   const params = {
-    UserPoolId,
-    ClientId,
+    UserPoolId: "ap-southeast-2_Q5to0vpJh",
+    ClientId: "2n19a3gsgt8i7doq2q8oid226a",
     AuthFlow: 'ADMIN_NO_SRP_AUTH',
     AuthParameters: { USERNAME: email, PASSWORD: password },
   };

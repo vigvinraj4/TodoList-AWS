@@ -2,7 +2,7 @@
   "name": "todolists-aws-resources",
   "version": "1.0.0",
   "description": "<!-- title: 'AWS NodeJS Example' description: 'This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework.' layout: Doc framework: v3 platform: AWS language: nodeJS priority: 1 authorLink: 'https://github.com/serverless' authorName: 'Serverless, inc.' authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4' -->",
-  "main": "index.js",
+  "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,12 +17,6 @@
   },
   "homepage": "https://github.com/vigvinraj4/TodoList-AWS#readme",
   "dependencies": {
-    "amazon-cognito-identity-js": "^5.2.11",
-    "aws-sdk": "^2.1238.0",
-    "circular-json": "^0.5.9",
-    "jsonwebtoken": "^8.5.1",
-    "jwk-to-pem": "^2.0.5",
-    "node-fetch": "^3.2.10",
-    "request": "^2.88.2"
+    "serverless-offline": "^11.2.0"
   }
 }
