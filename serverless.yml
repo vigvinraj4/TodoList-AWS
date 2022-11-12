@@ -57,6 +57,25 @@ resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
+      listTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          TableName: listTable
+          SSESpecification:
+            SSEEnabled: true
+          AttributeDefinitions:
+            - AttributeName: userId
+              AttributeType: S
+            - AttributeName: title
+              AttributeType: S
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: title
+              KeyType: RANGE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 functions:
   authenticate:
       description: this lambda is used for authenticate the api gateway before allowing any access.
@@ -120,6 +139,26 @@ functions:
         - http:
             method: post
             path: deleteUsers
+            cors: true
+            authorizer: 
+              name: authenticate
+  addingTitle:
+      description: This API is used for adding title to the lists table.
+      handler: src/addTitle.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: addTitle
+            cors: true
+            authorizer: 
+              name: authenticate
+  addingItems:
+      description: This API is used for adding Items to the lists table.
+      handler: src/addItems.lambdaFunction
+      events:
+        - http:
+            method: post
+            path: addItemsLists
             cors: true
             authorizer: 
               name: authenticate
