@@ -9,7 +9,7 @@ const poolData = {
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 module.exports.lambdaFunction = async (event) => {
-  const {email, password, phone} = JSON.parse(event.body);
+  const {email, password, name} = JSON.parse(event.body);
 
     console.log(email);
     console.log(password)
@@ -17,27 +17,55 @@ module.exports.lambdaFunction = async (event) => {
   
     var attributeList = [];
     attributeList.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name:"email",Value:email}));
-var result;
+
     try{
-      return new Promise((resolve, reject) =>
+     
+
+      let results = () => {
+        return new Promise((resolve, reject) =>
       userPool.signUp(email, password, attributeList, null, (err, result) => {
         console.log(err)
         if (err) {
           reject(err);
         } else {
           resolve({
-          statusCode: 200,
-          body: JSON.stringify("user has been created sucessfully "+ result),
-           headers: {
-           'Access-Control-Allow-Origin': '*',
-          }
+          data: JSON.stringify(result.userSub)
         });
         }
+        
       })
     );
-     
     }
-    
+    results()
+    .then((data)=>{
+      
+     
+      var userName=data.data;
+        const dynamoDb =new AWS.DynamoDB();
+
+      dynamoDb.putItem({
+
+        "TableName":"userTable",
+        "Item": {
+          "userName": {S:`${userName}`},
+          "SK": {S:"profileData"},
+          "fullName": {S:`${name}`},
+          "email":{S:`${email}`}
+        }
+
+      }).promise();
+
+    });
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify("data has been inserted"),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    }
+   
     catch (err){
       // Log errors
       console.error(`[${err.name}] ${err.message}`);

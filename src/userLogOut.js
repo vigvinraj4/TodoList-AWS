@@ -12,37 +12,38 @@ var poolData = {
 
 
 module.exports.lambdaFunction = async (event) => {
-  const {email, cofirmationCode} = JSON.parse(event.body);
-    const userPool= cognitoUserPool();
+  const {email} = JSON.parse(event.body);
+  const userPool= cognitoUserPool();
   const userData = {
     Username: email,
     Pool: userPool
   };
 var cognitoUsers = new AmazonCognitoIdentity.CognitoUser(userData);
-    console.log(email);
-    console.log(cofirmationCode)
+    console.log(cognitoUsers)
 
-      return new Promise((resolve, reject) => 
-      cognitoUsers.confirmRegistration(cofirmationCode, true, function (err, result) {
-        if (err) {
-            reject({
-                statusCode: err.statusCode,
-                body: JSON.stringify("account could not be confirmed"),
+      return new Promise((resolve, reject) => {
+      
+         if (cognitoUsers !=null) {
+
+          cognitoUsers.signOut();
+            resolve({
+                statusCode: 200,
+                body: JSON.stringify("user has signed out of the account sucessfully"),
                  headers: {
                  'Access-Control-Allow-Origin': '*',
                 }
               });
         } else {
             resolve({
-                statusCode: 200,
-                body: JSON.stringify("user has account has been confirmed "),
+                statusCode: 404,
+                body: JSON.stringify("user account could not be found"),
                  headers: {
                  'Access-Control-Allow-Origin': '*',
                 }
               });
         }
-         })
+         });
        
-          );
+         
      
    }

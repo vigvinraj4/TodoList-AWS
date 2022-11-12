@@ -7,13 +7,14 @@ const cognito = new AWS.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18
 module.exports.lambdaFunction = async (event) => {
   const methodArn = event.methodArn;
   const token = event.authorizationToken;
-
+  
   // Verify token
   return new Promise ((resolve) => {
     cognito.getUser({ AccessToken: token }, (err, data) => {
       // Generate policy document
       if (err) resolve(generateAuthResponse('unknownUser', 'Deny', methodArn));
       else resolve(generateAuthResponse(data.Username, 'Allow', methodArn));
+      console.log(data);
     });
   });
 };
