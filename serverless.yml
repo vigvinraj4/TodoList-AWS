@@ -162,4 +162,24 @@ functions:
             cors: true
             authorizer: 
               name: authenticate
+  getItemsLists:
+      description: This API is used for getting Items to the lists table.
+      handler: src/getLists.lambdaFunction
+      events:
+        - http:
+            method: get
+            path: getlists
+            cors: true
+            authorizer: 
+              name: authenticate
+  getItems:
+      description: This API is used for getting Items in the lists table.
+      handler: src/getItems.lambdaFunction
+      events:
+        - http:
+            method: get
+            path: getItems
+            cors: true
+            authorizer: 
+              name: authenticate
 
